@@ -19,8 +19,33 @@
 <body>
 <section>
     <h3><a href="index.html">Home</a></h3>
+    <a href="/meals">Update</a>
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
+    <hr/>
+    <jsp:useBean id="filterData" scope="request" type="ru.javawebinar.topjava.util.FilterData"/>
+    <form name="filter" action="/meals?action=filter" method="post">
+        <table>
+            <tr>
+                <td><b>Date from:</b></td>
+                <td><b>Time from:</b></td>
+            </tr>
+            <tr>
+                <td><input type="date" name="date_from" value="${filterData.startDate}"></td>
+                <td><input type="time" name="time_from" value="${filterData.startTime}"></td>
+            </tr>
+            <tr>
+                <td><b>Date to:</b></td>
+                <td><b>Time to:</b></td>
+            </tr>
+            <tr>
+                <td><input type="date" name="date_to" value="${filterData.endDate}"></td>
+                <td><input type="time" name="time_to" value="${filterData.endTime}"></td>
+            </tr>
+        </table>
+
+        <button type="submit">Apply</button>
+    </form>
     <hr/>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
