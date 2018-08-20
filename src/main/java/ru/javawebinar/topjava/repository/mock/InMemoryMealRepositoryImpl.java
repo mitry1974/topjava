@@ -3,10 +3,10 @@ package ru.javawebinar.topjava.repository.mock;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.to.MealWithExceed;
-import ru.javawebinar.topjava.util.FilterData;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             mealMap.put(meal.getId(), meal);
             return meal;
         }
-        // treat case: update, but absent in storage
+
         return mealMap.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
@@ -55,8 +55,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Collection<MealWithExceed> getFiltered(int userId, int calories, FilterData filterData){
-        return MealsUtil.getFilteredWithExceeded(getAll(userId), calories, filterData.getStartTime(), filterData.getEndTime(), filterData.getStartDate(), filterData.getEndDate());
+    public Collection<Meal> getAllByDate(int userId, LocalDate startDate, LocalDate endDate) {
+        return getAll(userId).stream().filter(meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate)).collect(Collectors.toList());
     }
 
 }

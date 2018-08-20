@@ -1,10 +1,9 @@
 package ru.javawebinar.topjava.service;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.to.MealWithExceed;
-import ru.javawebinar.topjava.util.FilterData;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
 public interface MealService {
@@ -19,5 +18,5 @@ public interface MealService {
 
     Collection<Meal> getAll(int userId);
 
-    Collection<MealWithExceed> getFiltered(int userId, int calories, FilterData filterData);
+    Collection<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate);
 }

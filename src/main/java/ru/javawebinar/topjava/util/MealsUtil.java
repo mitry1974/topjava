@@ -18,6 +18,9 @@ import static java.util.stream.Collectors.toList;
 
 public class MealsUtil {
     public static final List<Meal> MEALS1 = Arrays.asList(
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 10, 0), "Завтрак1", 5000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 13, 0), "Обед1", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 20, 0), "Ужин1", 500),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак1", 500),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед1", 1000),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин1", 500),
@@ -27,6 +30,9 @@ public class MealsUtil {
     );
 
     public static final List<Meal> MEALS2 = Arrays.asList(
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 10, 0), "Завтрак1", 5000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 13, 0), "Обед1", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 20, 0), "Ужин1", 500),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак2", 500),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед2", 1000),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин2", 500),
@@ -43,10 +49,6 @@ public class MealsUtil {
 
     public static List<MealWithExceed> getFilteredWithExceeded(Collection<Meal> meals, int caloriesPerDay, LocalTime startTime, LocalTime endTime) {
         return getFilteredWithExceeded(meals, caloriesPerDay, meal -> DateTimeUtil.isBetween(meal.getTime(), startTime, endTime));
-    }
-
-    public static List<MealWithExceed> getFilteredWithExceeded(Collection<Meal> meals, int caloriesPerDay, LocalTime startTime, LocalTime endTime, LocalDate startDate, LocalDate endDate) {
-        return getFilteredWithExceeded(meals, caloriesPerDay, meal -> DateTimeUtil.isBetween(meal.getTime(), startTime, endTime) && DateTimeUtil.isBetween(meal.getDate(), startDate, endDate));
     }
 
     private static List<MealWithExceed> getFilteredWithExceeded(Collection<Meal> meals, int caloriesPerDay, Predicate<Meal> filter) {

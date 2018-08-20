@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
-import ru.javawebinar.topjava.util.FilterData;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
@@ -21,13 +20,46 @@ import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 @Controller
 public class MealRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private FilterData filterData = new FilterData();
-
     private final MealService service;
-
+    private LocalDate startDate = LocalDate.MIN;
+    private LocalDate endDate = LocalDate.MAX;
+    private LocalTime startTime = LocalTime.MIN;
+    private LocalTime endTime = LocalTime.MAX;
     @Autowired
     public MealRestController(MealService service) {
         this.service = service;
+    }
+
+    public String getStartDate() {
+        return startDate == LocalDate.MIN ? "" : startDate.toString();
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate.isEmpty() ? LocalDate.MIN : LocalDate.parse(startDate);
+    }
+
+    public String getEndDate() {
+        return endDate == LocalDate.MAX ? "" : endDate.toString();
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate.isEmpty() ? LocalDate.MAX : LocalDate.parse(endDate);
+    }
+
+    public String getStartTime() {
+        return startTime == LocalTime.MIN ? "" : startTime.toString();
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime.isEmpty() ? LocalTime.MIN : LocalTime.parse(startTime);
+    }
+
+    public String getEndTime() {
+        return endTime == LocalTime.MAX ? "" : endTime.toString();
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime.isEmpty() ? LocalTime.MAX : LocalTime.parse(endTime);
     }
 
     public Meal save(Meal meal) {
@@ -47,7 +79,7 @@ public class MealRestController {
         return service.update(meal, authUserId());
     }
 
-    public Meal get(int id){
+    public Meal get(int id) {
         log.info("get {}", id);
         return service.get(id, authUserId());
     }
@@ -57,16 +89,12 @@ public class MealRestController {
         return MealsUtil.getWithExceeded(service.getAll(authUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
-    public Collection<MealWithExceed> getFilteredWithExceed(){
+    public Collection<MealWithExceed> getFilteredWithExceed() {
         log.info("getFilteredMeal {}", authUserId());
-        return service.getFiltered(authUserId(), MealsUtil.DEFAULT_CALORIES_PER_DAY, filterData);
-    }
-
-    public void setFilterData(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
-        filterData.set(startDate, endDate, startTime, endTime);
-    }
-
-    public FilterData getFilterData(){
-        return filterData;
+        return MealsUtil.getFilteredWithExceeded(
+                service.getFiltered(authUserId(), startDate, endDate),
+                MealsUtil.DEFAULT_CALORIES_PER_DAY,
+                startTime,
+                endTime);
     }
 }

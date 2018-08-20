@@ -23,7 +23,10 @@
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
     <hr/>
-    <jsp:useBean id="filterData" scope="request" type="ru.javawebinar.topjava.util.FilterData"/>
+    <jsp:useBean id="startDate" scope="request" type="java.lang.String"/>
+    <jsp:useBean id="endDate" scope="request" type="java.lang.String"/>
+    <jsp:useBean id="startTime" scope="request" type="java.lang.String"/>
+    <jsp:useBean id="endTime" scope="request" type="java.lang.String"/>
     <form name="filter" action="/meals?action=filter" method="post">
         <table>
             <tr>
@@ -31,16 +34,16 @@
                 <td><b>Time from:</b></td>
             </tr>
             <tr>
-                <td><input type="date" name="date_from" value="${filterData.startDate}"></td>
-                <td><input type="time" name="time_from" value="${filterData.startTime}"></td>
+                <td><input type="date" name="date_from" value="${startDate}"></td>
+                <td><input type="time" name="time_from" value="${startTime}"></td>
             </tr>
             <tr>
                 <td><b>Date to:</b></td>
                 <td><b>Time to:</b></td>
             </tr>
             <tr>
-                <td><input type="date" name="date_to" value="${filterData.endDate}"></td>
-                <td><input type="time" name="time_to" value="${filterData.endTime}"></td>
+                <td><input type="date" name="date_to" value="${endDate}"></td>
+                <td><input type="time" name="time_to" value="${endTime}"></td>
             </tr>
         </table>
 

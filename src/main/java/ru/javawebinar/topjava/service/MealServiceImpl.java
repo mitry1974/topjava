@@ -4,10 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.to.MealWithExceed;
-import ru.javawebinar.topjava.util.FilterData;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
@@ -48,7 +47,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Collection<MealWithExceed> getFiltered(int userId, int calories, FilterData filterData){
-        return repository.getFiltered(userId, calories, filterData);
+    public Collection<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate) {
+        return repository.getAllByDate(userId, startDate, endDate);
     }
 }

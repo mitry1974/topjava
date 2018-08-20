@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Objects;
@@ -47,15 +45,10 @@ public class MealServlet extends HttpServlet {
 
         switch (action) {
             case "filter":
-                String sDate = request.getParameter("date_from");
-                String eDate = request.getParameter("date_to");
-                String sTime = request.getParameter("time_from");
-                String eTime = request.getParameter("time_to");
-                LocalDate startDate = sDate.isEmpty() ? LocalDate.MIN : LocalDate.parse(sDate);
-                LocalDate endDate = eDate.isEmpty() ? LocalDate.MAX : LocalDate.parse(eDate);
-                LocalTime startTime = sTime.isEmpty() ? LocalTime.MIN : LocalTime.parse(sTime);
-                LocalTime endTime = eTime.isEmpty() ? LocalTime.MAX : LocalTime.parse(eTime);
-                mealController.setFilterData(startDate, endDate, startTime, endTime);
+                mealController.setStartDate(request.getParameter("date_from"));
+                mealController.setEndDate(request.getParameter("date_to"));
+                mealController.setStartTime(request.getParameter("time_from"));
+                mealController.setEndTime(request.getParameter("time_to"));
                 break;
             case "saveMeal":
                 String id = request.getParameter("id");
@@ -97,7 +90,10 @@ public class MealServlet extends HttpServlet {
                 Collection<MealWithExceed> meals = mealController.getFilteredWithExceed();
 
                 request.setAttribute("meals", meals);
-                request.setAttribute("filterData", mealController.getFilterData());
+                request.setAttribute("startDate", mealController.getStartDate());
+                request.setAttribute("endDate", mealController.getEndDate());
+                request.setAttribute("startTime", mealController.getStartTime());
+                request.setAttribute("endTime", mealController.getEndTime());
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
