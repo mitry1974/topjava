@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Objects;
@@ -43,13 +45,8 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
 
+        String location = "meals";
         switch (action) {
-            case "filter":
-                mealController.setStartDate(request.getParameter("date_from"));
-                mealController.setEndDate(request.getParameter("date_to"));
-                mealController.setStartTime(request.getParameter("time_from"));
-                mealController.setEndTime(request.getParameter("time_to"));
-                break;
             case "saveMeal":
                 String id = request.getParameter("id");
 
@@ -59,10 +56,16 @@ public class MealServlet extends HttpServlet {
                         Integer.parseInt(request.getParameter("calories")));
 
                 log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-                mealController.save(meal);
+
+                if (meal.isNew()) {
+                    mealController.save(meal);
+                } else {
+                    mealController.update(meal, Integer.parseInt(id));
+                }
+
                 break;
         }
-        response.sendRedirect("meals");
+        response.sendRedirect(location);
     }
 
     @Override
@@ -87,13 +90,31 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
-                Collection<MealWithExceed> meals = mealController.getFilteredWithExceed();
+
+
+                String sd = request.getParameter("startDate");
+                String ed = request.getParameter("endDate");
+                String st = request.getParameter("startTime");
+                String et = request.getParameter("endTime");
+                sd = (sd==null)?"":sd;
+                ed = (ed==null)?"":ed;
+                st = (st==null)?"":st;
+                et = (et==null)?"":et;
+
+
+                request.setAttribute("startDate", sd);
+                request.setAttribute("endDate", ed);
+                request.setAttribute("startTime", st);
+                request.setAttribute("endTime", et);
+
+                Collection<MealWithExceed> meals = mealController.getFilteredWithExceed(
+                        sd.isEmpty()?LocalDate.MIN:LocalDate.parse(sd),
+                        ed.isEmpty()?LocalDate.MAX:LocalDate.parse(ed),
+                        st.isEmpty()?LocalTime.MIN:LocalTime.parse(st),
+                        et.isEmpty()?LocalTime.MAX:LocalTime.parse(et));
 
                 request.setAttribute("meals", meals);
-                request.setAttribute("startDate", mealController.getStartDate());
-                request.setAttribute("endDate", mealController.getEndDate());
-                request.setAttribute("startTime", mealController.getStartTime());
-                request.setAttribute("endTime", mealController.getEndTime());
+
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

@@ -27,23 +27,23 @@
     <jsp:useBean id="endDate" scope="request" type="java.lang.String"/>
     <jsp:useBean id="startTime" scope="request" type="java.lang.String"/>
     <jsp:useBean id="endTime" scope="request" type="java.lang.String"/>
-    <form name="filter" action="/meals?action=filter" method="post">
+    <form name="filter" action="/meals?action=filter" method="get">
         <table>
             <tr>
                 <td><b>Date from:</b></td>
                 <td><b>Time from:</b></td>
             </tr>
             <tr>
-                <td><input type="date" name="date_from" value="${startDate}"></td>
-                <td><input type="time" name="time_from" value="${startTime}"></td>
+                <td><input type="date" name="startDate" value="${startDate}"></td>
+                <td><input type="time" name="startTime" value="${startTime}"></td>
             </tr>
             <tr>
                 <td><b>Date to:</b></td>
                 <td><b>Time to:</b></td>
             </tr>
             <tr>
-                <td><input type="date" name="date_to" value="${endDate}"></td>
-                <td><input type="time" name="time_to" value="${endTime}"></td>
+                <td><input type="date" name="endDate" value="${endDate}"></td>
+                <td><input type="time" name="endTime" value="${endTime}"></td>
             </tr>
         </table>
 

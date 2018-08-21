@@ -17,15 +17,6 @@ public class UserServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
-            ProfileRestController profileController = appCtx.getBean(ProfileRestController.class);
-        }
-
-    }
-
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SecurityUtil.setAuthUserId(Integer.parseInt(request.getParameter("select_user")));
 

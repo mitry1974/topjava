@@ -10,11 +10,11 @@ public interface MealService {
 
     void delete(int id, int userId) throws NotFoundException;
 
-    Meal get(int id, int userId);
+    Meal get(int id, int userId)throws NotFoundException;
 
     Meal save(Meal meal, int userId);
 
-    Meal update(Meal meal, int userId);
+    Meal update(Meal meal, int userId)throws NotFoundException;
 
     Collection<Meal> getAll(int userId);
 
