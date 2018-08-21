@@ -5,7 +5,6 @@ import ru.javawebinar.topjava.to.MealWithExceed;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
 import java.util.function.Predicate;
@@ -58,7 +57,7 @@ public class MealsUtil {
                 .collect(toList());
     }
 
-    public static List<Meal> getFilteredMeal(Collection<Meal> meals, Predicate<Meal> filter){
+    public static List<Meal> getFilteredMeal(Collection<Meal> meals, Predicate<Meal> filter) {
         return meals == null ? Collections.EMPTY_LIST : meals
                 .stream()
                 .filter(filter)

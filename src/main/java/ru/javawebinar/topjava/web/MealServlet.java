@@ -96,10 +96,10 @@ public class MealServlet extends HttpServlet {
                 String ed = request.getParameter("endDate");
                 String st = request.getParameter("startTime");
                 String et = request.getParameter("endTime");
-                sd = (sd==null)?"":sd;
-                ed = (ed==null)?"":ed;
-                st = (st==null)?"":st;
-                et = (et==null)?"":et;
+                sd = (sd == null) ? "" : sd;
+                ed = (ed == null) ? "" : ed;
+                st = (st == null) ? "" : st;
+                et = (et == null) ? "" : et;
 
 
                 request.setAttribute("startDate", sd);
@@ -108,10 +108,10 @@ public class MealServlet extends HttpServlet {
                 request.setAttribute("endTime", et);
 
                 Collection<MealWithExceed> meals = mealController.getFilteredWithExceed(
-                        sd.isEmpty()?LocalDate.MIN:LocalDate.parse(sd),
-                        ed.isEmpty()?LocalDate.MAX:LocalDate.parse(ed),
-                        st.isEmpty()?LocalTime.MIN:LocalTime.parse(st),
-                        et.isEmpty()?LocalTime.MAX:LocalTime.parse(et));
+                        sd.isEmpty() ? LocalDate.MIN : LocalDate.parse(sd),
+                        ed.isEmpty() ? LocalDate.MAX : LocalDate.parse(ed),
+                        st.isEmpty() ? LocalTime.MIN : LocalTime.parse(st),
+                        et.isEmpty() ? LocalTime.MAX : LocalTime.parse(et));
 
                 request.setAttribute("meals", meals);
 

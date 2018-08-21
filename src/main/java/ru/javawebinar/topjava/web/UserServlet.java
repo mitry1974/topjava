@@ -1,9 +1,6 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import ru.javawebinar.topjava.web.user.ProfileRestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
