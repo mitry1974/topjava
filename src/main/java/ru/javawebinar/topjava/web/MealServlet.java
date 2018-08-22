@@ -115,7 +115,7 @@ public class MealServlet extends HttpServlet {
 
                 request.setAttribute("meals", meals);
 
-                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                request.getRequestDispatcher("meals.jsp").forward(request, response);
                 break;
         }
     }

@@ -27,7 +27,7 @@
     <jsp:useBean id="endDate" scope="request" type="java.lang.String"/>
     <jsp:useBean id="startTime" scope="request" type="java.lang.String"/>
     <jsp:useBean id="endTime" scope="request" type="java.lang.String"/>
-    <form name="filter" action="/meals?action=filter" method="get">
+    <form name="filter" action="meals?action=filter" method="get">
         <table>
             <tr>
                 <td><b>Date from:</b></td>
