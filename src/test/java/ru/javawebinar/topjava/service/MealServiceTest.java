@@ -12,6 +12,7 @@ import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -76,7 +77,7 @@ public class MealServiceTest {
     @Test
     public void getAll() {
         List<Meal> meals = service.getAll(USER_ID);
-        assertMatch(meals, MEAL3, MEAL2, MEAL1);
+        assertMatch(meals, MEAL9, MEAL8, MEAL7,MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
     }
 
     @Test
@@ -96,5 +97,26 @@ public class MealServiceTest {
         m.setDescription("Полдник");
         m.setCalories(20000);
         Meal updated = service.update(m, UserTestData.USER_NOT_FOUND_ID);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void updateForeign() {
+        Meal m = service.get(MEAL1_ID, USER_ID);
+        m.setDateTime(LocalDateTime.now());
+        m.setDescription("Полдник");
+        m.setCalories(20000);
+        Meal updated = service.update(m, UserTestData.ADMIN_ID);
+    }
+
+    @Test
+    public void getBetweenDates() {
+        List<Meal> meals = service.getBetweenDates(LocalDate.parse("2015-05-29"), LocalDate.parse("2015-05-30"), USER_ID);
+        assertMatch(meals, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
+    }
+
+    @Test
+    public void getBetweenDateTimes() {
+        List<Meal> meals = service.getBetweenDateTimes(LocalDateTime.parse("2015-05-29T07:00"), LocalDateTime.parse("2015-05-30T11:00"), USER_ID);
+        assertMatch(meals, MEAL4, MEAL3, MEAL2, MEAL1);
     }
 }
