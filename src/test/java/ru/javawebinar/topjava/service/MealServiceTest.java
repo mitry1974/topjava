@@ -77,7 +77,7 @@ public class MealServiceTest {
     @Test
     public void getAll() {
         List<Meal> meals = service.getAll(USER_ID);
-        assertMatch(meals, MEAL9, MEAL8, MEAL7,MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
+        assertMatch(meals, MEAL9, MEAL8, MEAL7, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
     }
 
     @Test
