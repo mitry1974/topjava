@@ -37,7 +37,7 @@ public class MealTestData {
     public static final Meal MEAL12 = new Meal(MEAL12_ID, LocalDateTime.parse("2015-05-29T20:00"), "Ужин", 500);
 
     public static void assertMatch(Meal actual, Meal expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected);
+        assertThat(actual).isEqualToComparingFieldByField(expected);
     }
 
     public static void assertMatch(Iterable<Meal> actual, Meal... expected) {

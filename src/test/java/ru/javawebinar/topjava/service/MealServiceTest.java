@@ -38,7 +38,7 @@ public class MealServiceTest {
     @Test
     public void create() {
         Meal meal = new Meal(LocalDateTime.now(), "Тестовая еда 1", 500);
-        Meal created = service.update(meal, USER_ID);
+        Meal created = service.create(meal, USER_ID);
         meal.setId(created.getId());
         assertMatch(meal, created);
     }
@@ -87,7 +87,7 @@ public class MealServiceTest {
         m.setDescription("Полдник");
         m.setCalories(20000);
         Meal updated = service.update(m, USER_ID);
-        assertMatch(service.get(MEAL1_ID, USER_ID), m);
+        assertMatch(updated, m);
     }
 
     @Test(expected = NotFoundException.class)
