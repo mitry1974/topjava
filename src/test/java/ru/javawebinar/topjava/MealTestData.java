@@ -36,6 +36,10 @@ public class MealTestData {
     public static final Meal MEAL11 = new Meal(MEAL11_ID, LocalDateTime.parse("2015-05-29T14:00"), "Обед", 1500);
     public static final Meal MEAL12 = new Meal(MEAL12_ID, LocalDateTime.parse("2015-05-29T20:00"), "Ужин", 500);
 
+    public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
+        assertThat(actual).containsSequence(expected);
+    }
+
     public static void assertMatch(Meal actual, Meal expected) {
         assertThat(actual).isEqualToComparingFieldByField(expected);
     }
@@ -44,7 +48,4 @@ public class MealTestData {
         assertMatch(actual, Arrays.asList(expected));
     }
 
-    public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
-        assertThat(actual).isEqualTo(expected);
-    }
 }
