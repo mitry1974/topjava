@@ -4,6 +4,15 @@
         <resetJUL>true</resetJUL>
     </contextListener>
 
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <file>${TOPJAVA_ROOT}/log/topjava.log</file>
+
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%date %-5level %logger{50}.%M:%L - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <charset>UTF-8</charset>
@@ -11,11 +20,12 @@
         </encoder>
     </appender>
 
-    <logger name="org.postgresql" level="debug"/>
-    <logger name="org.springframework.jdbc" level="debug"/>
+    <logger name="org.postgresql" level="error"/>
+    <logger name="org.springframework.jdbc" level="error"/>
+    <logger name="org.hibernate" level="error"/>
     <logger name="ru.javawebinar.topjava" level="debug"/>
 
-    <root level="WARN">
+    <root level="error">
         <appender-ref ref="console"/>
     </root>
 
