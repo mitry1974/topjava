@@ -1,6 +1,9 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
@@ -13,11 +16,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,15 +55,16 @@ public class MealServiceTest {
     public final Stopwatch stopwatch = new Stopwatch() {
 
         protected void finished(long nanos, Description description) {
-            log.debug(description.getMethodName() + " завершен, время выполнения " + nanos + " наносекунд.");
-            timeMap.put(description.getMethodName(), nanos);
+            long mstime = nanos / 1000000;
+            log.debug(description.getMethodName() + " завершен, время выполнения " + mstime + " миллисекунд.");
+            timeMap.put(description.getMethodName(), mstime);
         }
 
     };
 
     @AfterClass
-    public static void After(){
-        timeMap.forEach((k, v)->log.debug(k  + " завершен, время выполнения " + v + " наносекунд."));
+    public static void after() {
+        timeMap.forEach((k, v) -> log.debug(k + " завершен, время выполнения " + v + " миллисекунд."));
     }
 
     @Test
@@ -91,6 +97,12 @@ public class MealServiceTest {
     public void getNotFound() {
         exception.expect(NotFoundException.class);
         service.get(MEAL1_ID, ADMIN_ID);
+    }
+
+    @Test
+    public void getNotFoundMeal() {
+        exception.expect(NotFoundException.class);
+        service.get(MEAL1_ID+100, ADMIN_ID);
     }
 
     @Test
