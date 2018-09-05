@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,13 +15,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,18 +36,14 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+    private static Map<String, Long> timeMap = new HashMap<>();
 
     static {
         SLF4JBridgeHandler.install();
     }
 
-    @Autowired
-    private MealService service;
     @Rule
     public final ExpectedException exception = ExpectedException.none();
-
-    private static Map<String, Long> timeMap = new HashMap<>();
-
     @Rule
     public final Stopwatch stopwatch = new Stopwatch() {
 
@@ -61,6 +54,8 @@ public class MealServiceTest {
         }
 
     };
+    @Autowired
+    private MealService service;
 
     @AfterClass
     public static void after() {
@@ -102,7 +97,7 @@ public class MealServiceTest {
     @Test
     public void getNotFoundMeal() {
         exception.expect(NotFoundException.class);
-        service.get(MEAL1_ID+100, ADMIN_ID);
+        service.get(MEAL1_ID + 100, ADMIN_ID);
     }
 
     @Test
