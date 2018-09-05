@@ -23,6 +23,7 @@ import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
@@ -48,7 +49,7 @@ public class MealServiceTest {
     public final Stopwatch stopwatch = new Stopwatch() {
 
         protected void finished(long nanos, Description description) {
-            long mstime = nanos / 1000000;
+            long mstime = TimeUnit.NANOSECONDS.toMillis(nanos);
             log.debug(description.getMethodName() + " завершен, время выполнения " + mstime + " миллисекунд.");
             timeMap.put(description.getMethodName(), mstime);
         }
