@@ -23,10 +23,6 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringRunner.class)
-/*
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
-*/
 public abstract class AbstractMealServiceTest extends AbstractDbSetupTest {
 
     @Rule
