@@ -33,7 +33,7 @@ public abstract class AbstractUserServiceTest extends AbstractDbSetupTest {
     }
 
     @Autowired
-    private UserService service;
+    protected UserService service;
 
     @Autowired
     private CacheManager cacheManager;
