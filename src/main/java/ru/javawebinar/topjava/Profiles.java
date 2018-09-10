@@ -12,9 +12,10 @@ public class Profiles {
             POSTGRES_DB = "postgres",
             HSQL_DB = "hsqldb";
 
-    public static String getActiveRepositoryImplementationProfile(){
+    public static String getActiveRepositoryImplementationProfile() {
         return REPOSITORY_IMPLEMENTATION;
     }
+
     //  Get DB profile depending of DB driver in classpath
     public static String getActiveDbProfile() {
         try {
