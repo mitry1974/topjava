@@ -18,5 +18,9 @@ public interface UserRepository {
 
     List<User> getAll();
 
-    default User fetchMeal(int id){return null;};
+    default User fetchMeal(int id) {
+        return null;
+    }
+
+    ;
 }

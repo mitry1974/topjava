@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.model;
 
-import org.hibernate.engine.profile.Fetch;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.util.CollectionUtils;
 
@@ -54,7 +53,7 @@ public class User extends AbstractNamedEntity {
     @Range(min = 10, max = 10000)
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     //@JoinTable
     private List<Meal> meals;
 
