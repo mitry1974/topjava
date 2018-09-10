@@ -19,7 +19,6 @@
 
 
     <beans profile="hsqldb">
-        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc.hsqldb"/>
         <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
 
         <!--no pooling-->
@@ -32,7 +31,6 @@
     </beans>
 
     <beans profile="postgres">
-        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc.postgres"/>
         <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>
 
         <bean id="dataSource"
@@ -44,7 +42,6 @@
     </beans>
 
     <beans profile="jdbc">
-        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc"/>
         <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
             <constructor-arg ref="dataSource"/>
         </bean>

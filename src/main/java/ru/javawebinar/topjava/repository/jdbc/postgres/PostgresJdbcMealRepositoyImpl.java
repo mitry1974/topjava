@@ -12,9 +12,9 @@ import ru.javawebinar.topjava.repository.jdbc.JdbcMealRepositoryImpl;
 
 import java.time.LocalDateTime;
 
-@Profile(Profiles.POSTGRES_DB)
 @Repository
-public class PostgresJdbcMealRepositoyImpl extends JdbcMealRepositoryImpl <LocalDateTime> implements MealRepository {
+@Profile(Profiles.POSTGRES_DB)
+public class PostgresJdbcMealRepositoyImpl extends JdbcMealRepositoryImpl<LocalDateTime> implements MealRepository {
     @Autowired
     public PostgresJdbcMealRepositoyImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
