@@ -63,6 +63,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User fetchMeal(int id) {
-        return repository.fetchMeal(id);
+        return checkNotFoundWithId(repository.fetchMeal(id), id);
     }
 }

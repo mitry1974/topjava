@@ -21,6 +21,4 @@ public interface UserRepository {
     default User fetchMeal(int id) {
         return null;
     }
-
-    ;
 }

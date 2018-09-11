@@ -24,6 +24,4 @@ public interface MealRepository {
     default Meal fetchUser(int id) {
         return null;
     }
-
-    ;
 }

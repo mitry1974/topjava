@@ -25,5 +25,5 @@ public interface MealService {
 
     Meal create(Meal meal, int userId);
 
-    Meal fetchUser(int id);
+    Meal fetchUser(int id) throws NotFoundException;
 }

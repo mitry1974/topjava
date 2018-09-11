@@ -21,7 +21,7 @@ public class PostgresJdbcMealRepositoyImpl extends JdbcMealRepositoryImpl<LocalD
     }
 
     @Override
-    protected java.time.LocalDateTime prepareDate(java.time.LocalDateTime dateTime) {
+    protected LocalDateTime prepareDate(LocalDateTime dateTime) {
         return dateTime;
     }
 }
