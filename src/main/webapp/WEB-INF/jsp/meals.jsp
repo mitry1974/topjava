@@ -7,7 +7,9 @@
     <title>Calories management</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+<jsp:include page="fragments/headTag.jsp"/>
 <body>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <h3>Meals</h3>
     <form method="post" action="filter">
@@ -59,5 +61,6 @@
         </c:forEach>
     </table>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>
