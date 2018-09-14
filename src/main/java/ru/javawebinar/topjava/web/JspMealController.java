@@ -9,6 +9,7 @@ import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.meal.AbstractMealController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -24,25 +25,26 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 import static ru.javawebinar.topjava.util.Util.orElse;
 
 @Controller
-public class JspMealController {
+public class JspMealController extends AbstractMealController {
+
     @Autowired
-    private MealService service;
+    public JspMealController(MealService service) {
+        super(service);
+    }
 
     @PostMapping("/filter")
-    public String filter(HttpServletRequest request ){
+    public String filter(HttpServletRequest request) {
         LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
         LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
         LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
         LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
 
-        int userId = SecurityUtil.authUserId();
+        List<MealWithExceed> meals = getBetween(
+                orElse(startDate, DateTimeUtil.MIN_DATE),
+                orElse(startTime, LocalTime.MIN),
+                orElse(endDate, DateTimeUtil.MAX_DATE),
+                orElse(endTime, LocalTime.MAX));
 
-        List<Meal> mealsDateFiltered = service.getBetweenDates(
-                orElse(startDate, DateTimeUtil.MIN_DATE), orElse(endDate, DateTimeUtil.MAX_DATE), userId);
-
-        List<MealWithExceed> meals = MealsUtil.getFilteredWithExceeded(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(),
-                orElse(startTime, LocalTime.MIN), orElse(endTime, LocalTime.MAX)
-        );
         request.setAttribute("meals", meals);
 
         return "meals";
@@ -65,13 +67,13 @@ public class JspMealController {
     }
 
     @GetMapping("/meals")
-    public String root(HttpServletRequest request){
+    public String root(HttpServletRequest request) {
         request.setAttribute("meals", MealsUtil.getWithExceeded(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay()));
         return "meals";
     }
 
     @GetMapping("/delete")
-    public String delete(HttpServletRequest request){
+    public String delete(HttpServletRequest request) {
         service.delete(getId(request), SecurityUtil.authUserId());
         return "redirect:meals";
     }
