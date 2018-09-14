@@ -57,6 +57,19 @@
         <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
             <constructor-arg ref="dataSource"/>
         </bean>
+
+        <tx:annotation-driven proxy-target-class="true" transaction-manager="jdbcTransactionManager" />
+
+        <bean id="jdbcTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <constructor-arg ref="dataSource"/>
+        </bean>
+        <tx:advice id="txAdvice" transaction-manager="jdbcTransactionManager">
+            <tx:attributes>
+                <tx:method name="get*" read-only="true"/>
+                <tx:method name="*"/>
+            </tx:attributes>
+        </tx:advice>
+
     </beans>
 
     <beans profile="jpa,datajpa">
