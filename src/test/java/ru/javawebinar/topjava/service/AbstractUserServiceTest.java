@@ -94,11 +94,12 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Test
     @Transactional
     public void update() throws Exception {
-        User updated = new User(USER);
+        User updated = new User(ADMIN);
         updated.setName("UpdatedName");
         updated.setCaloriesPerDay(330);
+        updated.setRoles(Arrays.asList(Role.ROLE_USER));
         service.update(updated);
-        assertMatch(service.get(USER_ID), updated);
+        assertMatch(service.get(ADMIN_ID), updated);
     }
 
     @Test
