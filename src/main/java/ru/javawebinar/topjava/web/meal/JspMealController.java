@@ -43,7 +43,7 @@ public class JspMealController extends AbstractMealController {
         return "meals";
     }
 
-    @PostMapping("meals/docreate")
+    @PostMapping("docreate")
     public String meals(HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("UTF-8");
         log.info("JspMealController, @PostMapping(\"/meals\")");
@@ -79,7 +79,7 @@ public class JspMealController extends AbstractMealController {
         log.info("JspMealController @GetMapping(\"/createMeal\")");
         final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         request.setAttribute("meal", meal);
-        return "mealForm";
+        return "mealForm?create";
     }
 
     @GetMapping("meals/update")
