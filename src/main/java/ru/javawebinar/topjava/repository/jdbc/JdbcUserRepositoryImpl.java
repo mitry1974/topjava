@@ -53,9 +53,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                             "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource) == 0) {
                 return null;
             }
-            if (jdbcTemplate.update("DELETE FROM user_roles WHERE user_roles.user_id=?", user.getId()) == 0) {
-                return null;
-            }
+            jdbcTemplate.update("DELETE FROM user_roles WHERE user_roles.user_id=?", user.getId());
 
             saveRoles(user);
         }
@@ -103,15 +101,13 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                 int id = rs.getInt("id");
                 String roleValue = rs.getString("role");
                 Role role = roleValue == null ? null:Role.valueOf(roleValue);
-                final User user = users.computeIfAbsent(id, i -> {
-                    try {
-                        return createUser(i, role, rs);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                });
-                user.addRole(role);
+                User u = users.get(id);
+                if(u == null){
+                    users.put(id, createUser(id, role, rs));
+                }
+                else {
+                    u.addRole(role);
+                }
             }
             return new ArrayList<>(users.values());
         }

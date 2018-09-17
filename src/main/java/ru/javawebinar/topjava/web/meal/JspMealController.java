@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
@@ -28,7 +29,7 @@ public class JspMealController extends AbstractMealController {
         super(service);
     }
 
-    @PostMapping("/filter")
+    @PostMapping("filter")
     public String filter(HttpServletRequest request) {
         LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
         LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
@@ -42,7 +43,7 @@ public class JspMealController extends AbstractMealController {
         return "meals";
     }
 
-    @PostMapping("/meals")
+    @PostMapping("meals/docreate")
     public String meals(HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("UTF-8");
         log.info("JspMealController, @PostMapping(\"/meals\")");
@@ -50,30 +51,30 @@ public class JspMealController extends AbstractMealController {
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
 
-        if (request.getParameter("id").isEmpty()) {
-            service.create(meal, SecurityUtil.authUserId());
+        int id = getId(request);
+        if (id == -1) {
+            create(meal);
         } else {
-            meal.setId(getId(request));
-            service.update(meal, SecurityUtil.authUserId());
+            meal.setId(id);
+            update(meal, id);
         }
         return "redirect:meals";
     }
 
-    @GetMapping("/meals")
+    @GetMapping("meals")
     public String root(HttpServletRequest request) {
         log.info("JspMealController @GetMapping(\"/meals\")");
         request.setAttribute("meals", getAll());
         return "meals";
     }
 
-    @GetMapping("/deleteMeal")
+    @GetMapping("meals/delete")
     public String delete(HttpServletRequest request) {
-        super.delete(getId(request));
-        log.info("JspMealController  @GetMapping(\"/deleteMeal\")");
+        delete(getId(request));
         return "redirect:meals";
     }
 
-    @GetMapping("/createMeal")
+    @GetMapping("/meals/create")
     public String create(HttpServletRequest request) {
         log.info("JspMealController @GetMapping(\"/createMeal\")");
         final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
@@ -81,11 +82,21 @@ public class JspMealController extends AbstractMealController {
         return "mealForm";
     }
 
-    @GetMapping("/updateMeal")
+    @GetMapping("meals/update")
     public String update(HttpServletRequest request) {
         log.info("JspMealController @GetMapping(\"/updateMeal\")");
         final Meal meal = service.get(getId(request), SecurityUtil.authUserId());
         request.setAttribute("meal", meal);
         return "mealForm";
     }
+
+    private int getId(HttpServletRequest request) {
+        String sid = request.getParameter("id");
+        if(sid.isEmpty()){
+            return -1;
+        }
+        String paramId = Objects.requireNonNull(request.getParameter("id"));
+        return Integer.parseInt(paramId);
+    }
+
 }
