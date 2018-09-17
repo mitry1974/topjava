@@ -18,11 +18,7 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Repository
 @Transactional(readOnly = true)
@@ -47,38 +43,37 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Transactional
     public User save(User user) {
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
-            saveRoles(newKey.intValue(), user.getRoles().toArray(new Role[0]));
-
+            saveRoles(user);
         } else {
-            if(jdbcTemplate.update("DELETE FROM user_roles WHERE user_roles.user_id=?", user.getId()) == 0){
-                return null;
-            }
-
             if (namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
                             "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource) == 0) {
                 return null;
             }
+            if (jdbcTemplate.update("DELETE FROM user_roles WHERE user_roles.user_id=?", user.getId()) == 0) {
+                return null;
+            }
 
-            saveRoles(user.getId(), user.getRoles().toArray(new Role[0]));
+            saveRoles(user);
         }
         return user;
     }
 
-    private void saveRoles(int user_id, Role[] roles){
+    private void saveRoles(User user) {
+        Role[] roles = user.getRoles().toArray(new Role[0]);
         MapSqlParameterSource[] mps = new MapSqlParameterSource[roles.length];
         for (int i = 0; i < roles.length; i++) {
-            mps[i] = new MapSqlParameterSource().addValue("user_id", user_id, Types.INTEGER).addValue("role", roles[i], Types.VARCHAR);
+            mps[i] = new MapSqlParameterSource().addValue("user_id", user.getId(), Types.INTEGER).addValue("role", roles[i], Types.VARCHAR);
         }
 
         namedParameterJdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id, role) VALUES(:user_id, :role)", mps);
     }
 
     @Override
+    @Transactional
     public boolean delete(int id) {
         return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
     }
@@ -106,22 +101,30 @@ public class JdbcUserRepositoryImpl implements UserRepository {
             Map<Integer, User> users = new LinkedHashMap<>();
             while (rs.next()) {
                 int id = rs.getInt("id");
-                Role role = Role.valueOf(rs.getString("role"));
-                User user = users.get((id));
-                if (user == null) {
-                    users.put(id, new User(id,
-                            rs.getString("name"),
-                            rs.getString("email"),
-                            rs.getString("password"),
-                            rs.getInt("calories_per_day"),
-                            rs.getBoolean("enabled"),
-                            rs.getDate("registered"),
-                            Arrays.asList(role)));
-                } else {
-                    user.addRole(role);
-                }
+                String roleValue = rs.getString("role");
+                Role role = roleValue == null ? null:Role.valueOf(roleValue);
+                final User user = users.computeIfAbsent(id, i -> {
+                    try {
+                        return createUser(i, role, rs);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                });
+                user.addRole(role);
             }
-            return users.values().stream().collect(Collectors.toList());
+            return new ArrayList<>(users.values());
+        }
+
+        User createUser(Integer id, Role role, ResultSet rs) throws SQLException {
+            return new User(id,
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getInt("calories_per_day"),
+                    rs.getBoolean("enabled"),
+                    rs.getDate("registered"),
+                    role==null?Collections.EMPTY_SET : EnumSet.of(role));
         }
     }
 }

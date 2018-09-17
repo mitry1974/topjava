@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
-import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.util.List;
@@ -27,15 +26,13 @@ public class MealRestController extends AbstractMealController {
     }
 
     public void delete(int id) {
-        int userId = SecurityUtil.authUserId();
-        log.info("delete meal {} for user {}", id, userId);
-        service.delete(id, userId);
+        super.delete(id);
     }
 
     public List<MealWithExceed> getAll() {
         int userId = SecurityUtil.authUserId();
         log.info("getAll for user {}", userId);
-        return MealsUtil.getWithExceeded(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay());
+        return getAll();
     }
 
     public Meal create(Meal meal) {

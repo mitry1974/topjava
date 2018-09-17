@@ -129,7 +129,8 @@ public class User extends AbstractNamedEntity {
     }
 
     public void addRole(Role role){
-        roles.add(role);
+        if(!CollectionUtils.isEmpty(roles))
+            roles.add(role);
     }
 
     public String getPassword() {

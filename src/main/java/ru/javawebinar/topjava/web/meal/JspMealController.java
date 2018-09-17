@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.web;
+package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
-import ru.javawebinar.topjava.util.DateTimeUtil;
-import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.meal.AbstractMealController;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -18,11 +16,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Objects;
 
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
-import static ru.javawebinar.topjava.util.Util.orElse;
 
 @Controller
 public class JspMealController extends AbstractMealController {
@@ -38,12 +34,8 @@ public class JspMealController extends AbstractMealController {
         LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
         LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
         LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
-
-        List<MealWithExceed> meals = getBetween(
-                orElse(startDate, DateTimeUtil.MIN_DATE),
-                orElse(startTime, LocalTime.MIN),
-                orElse(endDate, DateTimeUtil.MAX_DATE),
-                orElse(endTime, LocalTime.MAX));
+        log.info("JspMealController @PostMapping(\"/filter\"), startDate {}, endDate {}, startTime{}, endTime {}", startDate, endDate, startTime, endTime);
+        List<MealWithExceed> meals = getBetween(startDate, startTime, endDate, endTime);
 
         request.setAttribute("meals", meals);
 
@@ -53,6 +45,7 @@ public class JspMealController extends AbstractMealController {
     @PostMapping("/meals")
     public String meals(HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("UTF-8");
+        log.info("JspMealController, @PostMapping(\"/meals\")");
         Meal meal = new Meal(LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
@@ -68,38 +61,31 @@ public class JspMealController extends AbstractMealController {
 
     @GetMapping("/meals")
     public String root(HttpServletRequest request) {
-        request.setAttribute("meals", MealsUtil.getWithExceeded(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay()));
+        log.info("JspMealController @GetMapping(\"/meals\")");
+        request.setAttribute("meals", getAll());
         return "meals";
     }
 
-    @GetMapping("/delete")
+    @GetMapping("/deleteMeal")
     public String delete(HttpServletRequest request) {
-        service.delete(getId(request), SecurityUtil.authUserId());
+        super.delete(getId(request));
+        log.info("JspMealController  @GetMapping(\"/deleteMeal\")");
         return "redirect:meals";
     }
 
-    @GetMapping("/create")
+    @GetMapping("/createMeal")
     public String create(HttpServletRequest request) {
+        log.info("JspMealController @GetMapping(\"/createMeal\")");
         final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         request.setAttribute("meal", meal);
         return "mealForm";
     }
 
-    @GetMapping("/update")
+    @GetMapping("/updateMeal")
     public String update(HttpServletRequest request) {
+        log.info("JspMealController @GetMapping(\"/updateMeal\")");
         final Meal meal = service.get(getId(request), SecurityUtil.authUserId());
         request.setAttribute("meal", meal);
         return "mealForm";
-    }
-
-    @GetMapping("/all")
-    public String all(HttpServletRequest request) {
-        request.setAttribute("meals", service.getAll(SecurityUtil.authUserId()));
-        return "meals";
-    }
-
-    private int getId(HttpServletRequest request) {
-        String paramId = Objects.requireNonNull(request.getParameter("id"));
-        return Integer.parseInt(paramId);
     }
 }
