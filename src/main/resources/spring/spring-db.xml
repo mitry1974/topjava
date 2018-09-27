@@ -58,7 +58,7 @@
             <constructor-arg ref="dataSource"/>
         </bean>
 
-        <tx:annotation-driven proxy-target-class="true" transaction-manager="jdbcTransactionManager" />
+        <tx:annotation-driven proxy-target-class="true" transaction-manager="jdbcTransactionManager"/>
 
         <bean id="jdbcTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
             <constructor-arg ref="dataSource"/>

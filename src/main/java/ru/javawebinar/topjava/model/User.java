@@ -128,8 +128,8 @@ public class User extends AbstractNamedEntity {
         return roles;
     }
 
-    public void addRole(Role role){
-        if(!CollectionUtils.isEmpty(roles))
+    public void addRole(Role role) {
+        if (!CollectionUtils.isEmpty(roles))
             roles.add(role);
     }
 

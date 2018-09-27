@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
 <head>
     <title><spring:message code="mealForm.title"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
@@ -15,10 +15,9 @@
 
     <h2><spring:message code="${param.action == 'create' ? 'mealForm.createMeal' : 'mealForm.editMeal'}"/></h2>
 
-    <%--//<h2>${param.action == 'create' ? 'Create meal' : 'Edit Meal'}</h2>--%>
     <hr>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
-    <form method="POST" action="/meals/docreate">
+    <form method="POST" action="${pageContext.request.contextPath}/meals/docreate">
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
             <dt><spring:message code="mealForm.dateTime"/></dt>

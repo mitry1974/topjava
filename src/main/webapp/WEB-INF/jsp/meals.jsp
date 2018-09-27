@@ -2,11 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>Calories management</title>
-    <link rel="stylesheet" href="css/style.css">
 </head>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
@@ -33,7 +32,7 @@
         <button type="submit"><spring:message code="meals.filter"/></button>
     </form>
     <hr/>
-    <a href="meals/create"><spring:message code="meals.add"/></a>
+    <a href="meals/create?action=create"><spring:message code="meals.add"/></a>
     <hr/>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
@@ -56,7 +55,7 @@
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="meals/update?id=${meal.id}"><spring:message code="meals.update"/></a></td>
+                <td><a href="meals/update?action=update&id=${meal.id}"><spring:message code="meals.update"/></a></td>
                 <td><a href="meals/delete?id=${meal.id}"><spring:message code="meals.delete"/></a></td>
             </tr>
         </c:forEach>

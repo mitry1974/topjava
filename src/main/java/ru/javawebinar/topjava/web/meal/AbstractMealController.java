@@ -60,13 +60,13 @@ public class AbstractMealController {
         return service.create(meal, userId);
     }
 
-    void delete(int id){
+    void delete(int id) {
         int userId = SecurityUtil.authUserId();
         log.info("delete meal {} for user {}", id, userId);
         service.delete(id, userId);
     }
 
-    List<MealWithExceed> getAll(){
+    List<MealWithExceed> getAll() {
         return MealsUtil.getWithExceeded(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay());
     }
 

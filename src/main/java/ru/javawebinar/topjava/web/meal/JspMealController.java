@@ -43,7 +43,7 @@ public class JspMealController extends AbstractMealController {
         return "meals";
     }
 
-    @PostMapping("docreate")
+    @PostMapping("/meals/docreate")
     public String meals(HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("UTF-8");
         log.info("JspMealController, @PostMapping(\"/meals\")");
@@ -58,20 +58,20 @@ public class JspMealController extends AbstractMealController {
             meal.setId(id);
             update(meal, id);
         }
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
-    @GetMapping("meals")
+    @GetMapping("/meals")
     public String root(HttpServletRequest request) {
         log.info("JspMealController @GetMapping(\"/meals\")");
         request.setAttribute("meals", getAll());
         return "meals";
     }
 
-    @GetMapping("meals/delete")
+    @GetMapping("/meals/delete")
     public String delete(HttpServletRequest request) {
         delete(getId(request));
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
     @GetMapping("/meals/create")
@@ -79,10 +79,10 @@ public class JspMealController extends AbstractMealController {
         log.info("JspMealController @GetMapping(\"/createMeal\")");
         final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         request.setAttribute("meal", meal);
-        return "mealForm?create";
+        return "mealForm";
     }
 
-    @GetMapping("meals/update")
+    @GetMapping("/meals/update")
     public String update(HttpServletRequest request) {
         log.info("JspMealController @GetMapping(\"/updateMeal\")");
         final Meal meal = service.get(getId(request), SecurityUtil.authUserId());
@@ -92,7 +92,7 @@ public class JspMealController extends AbstractMealController {
 
     private int getId(HttpServletRequest request) {
         String sid = request.getParameter("id");
-        if(sid.isEmpty()){
+        if (sid.isEmpty()) {
             return -1;
         }
         String paramId = Objects.requireNonNull(request.getParameter("id"));

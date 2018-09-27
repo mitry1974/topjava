@@ -100,12 +100,11 @@ public class JdbcUserRepositoryImpl implements UserRepository {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String roleValue = rs.getString("role");
-                Role role = roleValue == null ? null:Role.valueOf(roleValue);
+                Role role = roleValue == null ? null : Role.valueOf(roleValue);
                 User u = users.get(id);
-                if(u == null){
+                if (u == null) {
                     users.put(id, createUser(id, role, rs));
-                }
-                else {
+                } else {
                     u.addRole(role);
                 }
             }
@@ -120,7 +119,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                     rs.getInt("calories_per_day"),
                     rs.getBoolean("enabled"),
                     rs.getDate("registered"),
-                    role==null?Collections.EMPTY_SET : EnumSet.of(role));
+                    role == null ? Collections.EMPTY_SET : EnumSet.of(role));
         }
     }
 }
