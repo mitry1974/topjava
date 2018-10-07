@@ -9,17 +9,32 @@ import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.*;
 
 public class MealRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = MealRestController.REST_URL + '/';
+
+    @Test
+    void testDelete() throws Exception {
+        mockMvc.perform(delete(REST_URL + MEAL1_ID))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        assertMatch(mealService.getAll(USER_ID), MEAL6, MEAL5, MEAL4, MEAL3, MEAL2);
+
+    }
 
     @Test
     void testCreate() throws Exception {
@@ -35,21 +50,16 @@ public class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void testDelete() throws Exception {
-        mockMvc.perform(delete(REST_URL + MEAL1_ID))
-                .andDo(print())
-                .andExpect(status().isNoContent());
+    void testUpdate() throws Exception {
+        Meal updated = new Meal(MEAL1);
+        updated.setDescription("Updated description");
 
-        assertMatch(mealService.getAll(USER_ID), MEAL6, MEAL5, MEAL4, MEAL3, MEAL2);
+        mockMvc.perform(put(REST_URL + MEAL1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isOk());
 
-    }
-
-    @Test
-    void testGetAll() throws Exception {
-        mockMvc.perform(get(REST_URL))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1));
+        assertMatch(mealService.get(MEAL1_ID, USER_ID), updated);
     }
 
     @Test
@@ -62,15 +72,23 @@ public class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void testUpdate() throws Exception {
-        Meal updated = new Meal(MEAL1);
-        updated.setDescription("Updated description");
+    void testGetAll() throws Exception {
+        mockMvc.perform(get(REST_URL))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(contentJson(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1));
+    }
 
-        mockMvc.perform(put(REST_URL + MEAL1_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updated)))
-                .andExpect(status().isOk());
+    @Test
+    void testGetBetween() throws Exception {
+        final String URI = REST_URL +
+                LocalDateTime.of(2015, Month.MAY, 31, 11, 0) + "/" +
+                LocalDateTime.of(2015, Month.MAY, 31, 21, 0);
 
-        assertMatch(mealService.get(MEAL1_ID, USER_ID), updated);
+        mockMvc.perform(get(URI))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(contentJson(MEAL5, MEAL6));
     }
 }
