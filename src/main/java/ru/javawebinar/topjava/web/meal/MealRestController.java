@@ -23,12 +23,12 @@ public class MealRestController extends AbstractMealController {
     @Override
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") int id){
+    public void delete(@PathVariable("id") int id) {
         super.delete(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Meal> createWithLocation(@RequestBody Meal meal){
+    public ResponseEntity<Meal> createWithLocation(@RequestBody Meal meal) {
         Meal created = super.create(meal);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -39,13 +39,13 @@ public class MealRestController extends AbstractMealController {
 
     @Override
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@RequestBody Meal meal, @PathVariable("id") int id){
+    public void update(@RequestBody Meal meal, @PathVariable("id") int id) {
         super.update(meal, id);
     }
 
     @Override
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Meal get(@PathVariable("id") int id){
+    public Meal get(@PathVariable("id") int id) {
         return super.get(id);
     }
 
@@ -55,12 +55,21 @@ public class MealRestController extends AbstractMealController {
         return super.getAll();
     }
 
-    @GetMapping(value = "/{start}/{end}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MealWithExceed> getBetween(
-            @PathVariable("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-            @PathVariable("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end){
+            @RequestParam(value = "startDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+            @RequestParam(value = "endDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
 
-        return super.getBetween(start.toLocalDate(), start.toLocalTime(), end.toLocalDate(), end.toLocalTime());
+        return super.getBetween(startDateTime.toLocalDate(), startDateTime.toLocalTime(), endDateTime.toLocalDate(), endDateTime.toLocalTime());
     }
 
+    @GetMapping(value = "/filterAll", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MealWithExceed> getBetween(
+            @RequestParam(value = "startDate", required = false) LocalDate startDate,
+            @RequestParam(value = "startTime", required = false) LocalTime startTime,
+            @RequestParam(value = "endDate", required = false) LocalDate endDate,
+            @RequestParam(value = "endTime", required = false) LocalTime endTime) {
+
+        return super.getBetween(startDate, startTime, endDate, endTime);
+    }
 }

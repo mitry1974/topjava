@@ -50,7 +50,7 @@ public class Meal extends AbstractBaseEntity {
     public Meal() {
     }
 
-    public Meal(Meal meal){
+    public Meal(Meal meal) {
         this(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories());
     }
 

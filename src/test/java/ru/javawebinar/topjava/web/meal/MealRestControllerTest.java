@@ -7,21 +7,17 @@ import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
-import ru.javawebinar.topjava.web.user.AdminRestController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
-import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 public class MealRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = MealRestController.REST_URL + '/';
@@ -81,14 +77,36 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetBetween() throws Exception {
-        final String URI = REST_URL +
-                LocalDateTime.of(2015, Month.MAY, 31, 11, 0) + "/" +
-                LocalDateTime.of(2015, Month.MAY, 31, 21, 0);
+        final String uri = REST_URL + "filter" +
+                "?startDateTime=" + LocalDateTime.of(2015, Month.MAY, 31, 11, 0) +
+                "&endDateTime=" + LocalDateTime.of(2015, Month.MAY, 31, 21, 0);
 
-        mockMvc.perform(get(URI))
+
+        mockMvc.perform(get(uri))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(MEAL5, MEAL6));
+    }
+
+    @Test
+    void testGetBetweenFilter() throws Exception {
+        String uri = REST_URL + "filterAll" +
+                "?startDate=" + LocalDate.of(2015, Month.MAY, 31) +
+                "&endDate=" + LocalDate.of(2015, Month.MAY, 31);
+
+        mockMvc.perform(get(uri))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(contentJson(MEAL4, MEAL5, MEAL6));
+
+        uri = REST_URL + "filterAll?";
+
+        mockMvc.perform(get(uri))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(contentJson(MEAL1, MEAL2, MEAL3, MEAL4, MEAL5, MEAL6));
     }
 }

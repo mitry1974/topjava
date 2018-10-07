@@ -39,25 +39,25 @@ class RootControllerTest extends AbstractControllerTest {
                 .andExpect(view().name("meals"))
                 .andExpect(forwardedUrl("/WEB-INF/jsp/meals.jsp"))
                 .andExpect(model().attribute("meals", hasSize(6)))
-                .andExpect(model().attribute("meals",hasItem(allOf(hasProperty("id", is(MEAL1_ID)),
+                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID)),
                         hasProperty("dateTime", is(of(2015, Month.MAY, 30, 10, 0))),
                         hasProperty("description", is("Завтрак"))))))
-                .andExpect(model().attribute("meals",hasItem(allOf(hasProperty("id", is(MEAL1_ID + 1)),
+                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID + 1)),
                         hasProperty("dateTime", is(of(2015, Month.MAY, 30, 13, 0))),
                         hasProperty("description", is("Обед"))))))
-                .andExpect(model().attribute("meals",hasItem(allOf(hasProperty("id", is(MEAL1_ID + 2)),
+                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID + 2)),
                         hasProperty("dateTime", is(of(2015, Month.MAY, 30, 20, 0))),
                         hasProperty("description", is("Ужин"))))))
-                .andExpect(model().attribute("meals",hasItem(allOf(hasProperty("id", is(MEAL1_ID + 3)),
+                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID + 3)),
                         hasProperty("dateTime", is(of(2015, Month.MAY, 31, 10, 0))),
                         hasProperty("description", is("Завтрак"))))))
-                .andExpect(model().attribute("meals",hasItem(allOf(hasProperty("id", is(MEAL1_ID + 4)),
+                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID + 4)),
                         hasProperty("dateTime", is(of(2015, Month.MAY, 31, 13, 0))),
                         hasProperty("description", is("Обед"))))))
-                .andExpect( model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID + 5)),
+                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID + 5)),
                         hasProperty("dateTime", is(of(2015, Month.MAY, 31, 20, 0))),
                         hasProperty("description", is("Ужин"))))
-                        ));
+                ));
 
     }
 }
