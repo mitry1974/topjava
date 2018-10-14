@@ -1,15 +1,13 @@
 package ru.javawebinar.topjava.web;
 
 import org.junit.jupiter.api.Test;
+import ru.javawebinar.topjava.to.MealWithExceed;
 
-import java.time.Month;
-
-import static java.time.LocalDateTime.of;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.javawebinar.topjava.MealTestData.MEAL1_ID;
+import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.USER;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
@@ -39,25 +37,11 @@ class RootControllerTest extends AbstractControllerTest {
                 .andExpect(view().name("meals"))
                 .andExpect(forwardedUrl("/WEB-INF/jsp/meals.jsp"))
                 .andExpect(model().attribute("meals", hasSize(6)))
-                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID)),
-                        hasProperty("dateTime", is(of(2015, Month.MAY, 30, 10, 0))),
-                        hasProperty("description", is("Завтрак"))))))
-                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID + 1)),
-                        hasProperty("dateTime", is(of(2015, Month.MAY, 30, 13, 0))),
-                        hasProperty("description", is("Обед"))))))
-                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID + 2)),
-                        hasProperty("dateTime", is(of(2015, Month.MAY, 30, 20, 0))),
-                        hasProperty("description", is("Ужин"))))))
-                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID + 3)),
-                        hasProperty("dateTime", is(of(2015, Month.MAY, 31, 10, 0))),
-                        hasProperty("description", is("Завтрак"))))))
-                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID + 4)),
-                        hasProperty("dateTime", is(of(2015, Month.MAY, 31, 13, 0))),
-                        hasProperty("description", is("Обед"))))))
-                .andExpect(model().attribute("meals", hasItem(allOf(hasProperty("id", is(MEAL1_ID + 5)),
-                        hasProperty("dateTime", is(of(2015, Month.MAY, 31, 20, 0))),
-                        hasProperty("description", is("Ужин"))))
-                ));
-
+                .andExpect(model().attribute("meals", contains(new MealWithExceed(MEAL6.getId(), MEAL6.getDateTime(), MEAL6.getDescription(), MEAL6.getCalories(), true),
+                        new MealWithExceed(MEAL5.getId(), MEAL5.getDateTime(), MEAL5.getDescription(), MEAL5.getCalories(), true),
+                        new MealWithExceed(MEAL4.getId(), MEAL4.getDateTime(), MEAL4.getDescription(), MEAL4.getCalories(), true),
+                        new MealWithExceed(MEAL3.getId(), MEAL3.getDateTime(), MEAL3.getDescription(), MEAL3.getCalories(), false),
+                        new MealWithExceed(MEAL2.getId(), MEAL2.getDateTime(), MEAL2.getDescription(), MEAL2.getCalories(), false),
+                        new MealWithExceed(MEAL1.getId(), MEAL1.getDateTime(), MEAL1.getDescription(), MEAL1.getCalories(), false))));
     }
 }
