@@ -1,6 +1,6 @@
 function makeEditable() {
     $(".delete").click(function () {
-        deleteRow($(this).attr("id"));
+        deleteRow(getClosestRowId($(this)));
     });
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
@@ -9,6 +9,13 @@ function makeEditable() {
 
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
     $.ajaxSetup({cache: false});
+}
+
+function getClosestRow(element) {
+    return element.closest("tr");
+}
+function getClosestRowId(element) {
+    return getClosestRow(element).attr("id")
 }
 
 function add() {
@@ -33,17 +40,17 @@ function updateTable() {
     });
 }
 
-function save() {
+function save(successCallback) {
     var form = $("#detailsForm");
     $.ajax({
         type: "POST",
         url: ajaxUrl,
         data: form.serialize(),
-        success: function () {
+        success: successCallback !== "undefined"?function () {
             $("#editRow").modal("hide");
             updateTable();
             successNoty("Saved");
-        }
+        }:successCallback
     });
 }
 
