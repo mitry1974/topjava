@@ -13,7 +13,7 @@
 <div class="jumbotron pt-4">
     <div class="container">
         <h3><spring:message code="meal.title"/></h3>
-        <form id="filterMeal" name="filterMeal">
+        <form id="filterMealForm" name="filterMeal">
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="startDate" class="col-form-label" size="100"><spring:message

@@ -46,7 +46,7 @@ function save(successCallback) {
         type: "POST",
         url: ajaxUrl,
         data: form.serialize(),
-        success: successCallback !== "undefined"?function () {
+        success: successCallback === "undefined"?function () {
             $("#editRow").modal("hide");
             updateTable();
             successNoty("Saved");

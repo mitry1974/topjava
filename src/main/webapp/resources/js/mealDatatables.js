@@ -36,7 +36,7 @@ $(function () {
 });
 
 function filter(bclear) {
-    var form = $("#filterMeal");
+    var form = $("#filterMealForm");
     if(bclear){
         form.find(":input").val("");
     }
@@ -61,7 +61,7 @@ function getFiltered(form) {
 function saveMeal() {
     save(function () {
         $("#editRow").modal("hide");
-        getFiltered();
+        getFiltered($("#filterMealForm"));
         successNoty("Saved");
     })
 }
