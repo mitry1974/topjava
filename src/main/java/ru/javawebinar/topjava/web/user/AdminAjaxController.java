@@ -37,11 +37,15 @@ public class AdminAjaxController extends AbstractUserController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void enable(@RequestBody Boolean enable, @PathVariable("id") int id){
+    public void enable(@RequestBody boolean enable, @PathVariable("id") int id){
+/*
         User user = super.get(id);
         if(user.isEnabled() != enable) {
             user.setEnabled(enable);
             super.update(user, id);
         }
+*/
+
+        super.enable(id, enable);
     }
 }

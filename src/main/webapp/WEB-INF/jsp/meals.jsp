@@ -35,11 +35,11 @@
                     <input type="time" class="form-control" id="endTime" name="endTime" value="${param.endTime}">
                 </div>
             </div>
-            <button type="button" class="btn btn-info" onclick="filter(false)">
+            <button type="button" class="btn btn-info" onclick="filter()">
                 <span class="fa fa-filter"></span>
                 <spring:message code="meal.filter"/>
             </button>
-            <button type="button" class="btn btn-info" onclick="filter(true)">
+            <button type="button" class="btn btn-info" onclick="clearFilter()">
                 <span class="fa fa-filter"></span>
                 <spring:message code="meal.clearfilter"/>
             </button>

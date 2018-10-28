@@ -35,13 +35,16 @@ $(function () {
     makeEditable();
 });
 
-function filter(bclear) {
+function filter() {
     var form = $("#filterMealForm");
-    if(bclear){
-        form.find(":input").val("");
-    }
     getFiltered(form);
     return false;
+}
+
+function clearFilter(){
+    var form = $("#filterMealForm");
+    form.find(":input").val("");
+    updateTable();
 }
 
 function getFiltered(form) {
@@ -52,7 +55,7 @@ function getFiltered(form) {
         data: form.serialize()
     })
         .done(function (data) {
-            datatableApi.clear().rows.add(data).draw();
+            updateDataTable(data);
             successNoty("Filtered");
         });
 
