@@ -1,8 +1,4 @@
 function makeEditable() {
-    $(".delete").click(function () {
-        deleteRow(getClosestRowId($(this)));
-    });
-
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
     });
@@ -23,15 +19,17 @@ function add() {
     $("#editRow").modal();
 }
 
-function deleteRow(id) {
+function deleteRow(id, successDeleteCallback) {
     $.ajax({
         url: ajaxUrl + id,
         type: "DELETE",
-        success: function () {
-            updateTable();
-            successNoty("Deleted");
-        }
+        success: successDeleteCallback === null?defaultSuccessDeleteCallback:successDeleteCallback
     });
+}
+
+function defaultSuccessDeleteCallback() {
+    updateTable();
+    successNoty("Deleted");
 }
 
 function updateTable() {
@@ -43,18 +41,20 @@ function updateTable() {
 function updateDataTable(data) {
     datatableApi.clear().rows.add(data).draw();
 }
-function save(successCallback) {
+function save(successSaveCallback) {
     var form = $("#detailsForm");
     $.ajax({
         type: "POST",
         url: ajaxUrl,
         data: form.serialize(),
-        success: successCallback === "undefined"?function () {
-            $("#editRow").modal("hide");
-            updateTable();
-            successNoty("Saved");
-        }:successCallback
+        success: successSaveCallback === null?defaultSuccessSaveCallback:successSaveCallback
     });
+}
+
+function defaultSuccessSaveCallback() {
+    $("#editRow").modal("hide");
+    updateTable();
+    successNoty("Saved");
 }
 
 var failedNote;

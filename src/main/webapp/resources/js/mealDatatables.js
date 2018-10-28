@@ -28,12 +28,24 @@ $(function () {
         "order": [
             [
                 0,
-                "asc"
+                "desc"
             ]
         ]
     });
-    makeEditable();
+    mealMakeEditable();
 });
+
+function mealMakeEditable() {
+    $(".delete").click(function (){
+        deleteRow(getClosestRowId($(this)), function () {
+            getFiltered($("#filterMealForm"));
+            successNoty("Deleted");
+
+        });
+    });
+
+    makeEditable();
+}
 
 function filter() {
     var form = $("#filterMealForm");
@@ -66,5 +78,13 @@ function saveMeal() {
         $("#editRow").modal("hide");
         getFiltered($("#filterMealForm"));
         successNoty("Saved");
+    })
+}
+
+function deleteMeal(id) {
+    deleteRow(id, function () {
+        getFiltered($("#filterMealForm"));
+        successNoty("Deleted");
+
     })
 }

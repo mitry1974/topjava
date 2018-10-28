@@ -48,23 +48,23 @@ function userMakeEditable() {
         setColor($(this), this.checked);
     });
 
+    $(".delete").click(function () {
+        deleteRow(getClosestRowId($(this)), null);
+    });
+
+
     makeEditable();
 }
 
 function setColor(element, checked) {
     var tr = getClosestRow(element);
-    var currentColor=tr.css("color");
-    var disabledColor = "#C2C8C1";
-    var oldColor = tr.attr("oldcolor");
 
-    if(checked && typeof oldColor !== "undefined" ){
-        tr.css("color", oldColor);
+    if(checked){
+        tr.removeClass('disabled_row');
     }
-    if(!checked){
-        tr.css("color", disabledColor);
+    else{
+        tr.addClass('disabled_row')
     }
-
-    tr.attr("oldcolor", currentColor);
 }
 function enableUser(checkbox, checked) {
     $.ajax({
