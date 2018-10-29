@@ -32,7 +32,7 @@
             </thead>
             <c:forEach items="${users}" var="user">
                 <jsp:useBean id="user" type="ru.javawebinar.topjava.model.User"/>
-                <tr id="${user.id}">
+                <tr user-enabled=${user.enabled} id="${user.id}">
                     <td><c:out value="${user.name}"/></td>
                     <td><a href="mailto:${user.email}">${user.email}</a></td>
                     <td>${user.roles}</td>
@@ -82,7 +82,7 @@
                     <span class="fa fa-close"></span>
                     <spring:message code="common.cancel"/>
                 </button>
-                <button type="button" class="btn btn-primary" onclick="save(null)">
+                <button type="button" class="btn btn-primary" onclick="save(updateTable)">
                     <span class="fa fa-check"></span>
                     <spring:message code="common.save"/>
                 </button>

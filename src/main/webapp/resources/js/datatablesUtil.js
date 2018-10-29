@@ -1,6 +1,10 @@
-function makeEditable() {
+function makeEditable(updateCallback) {
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
+    });
+
+    $(".delete").click(function () {
+        deleteRow(getClosestRowId($(this)), updateCallback);
     });
 
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
@@ -10,6 +14,7 @@ function makeEditable() {
 function getClosestRow(element) {
     return element.closest("tr");
 }
+
 function getClosestRowId(element) {
     return getClosestRow(element).attr("id")
 }
@@ -19,17 +24,15 @@ function add() {
     $("#editRow").modal();
 }
 
-function deleteRow(id, successDeleteCallback) {
+function deleteRow(id, updateDataCallback) {
     $.ajax({
         url: ajaxUrl + id,
         type: "DELETE",
-        success: successDeleteCallback === null?defaultSuccessDeleteCallback:successDeleteCallback
+        success: function () {
+            updateDataCallback();
+            successNoty("Deleted");
+        }
     });
-}
-
-function defaultSuccessDeleteCallback() {
-    updateTable();
-    successNoty("Deleted");
 }
 
 function updateTable() {
@@ -41,20 +44,19 @@ function updateTable() {
 function updateDataTable(data) {
     datatableApi.clear().rows.add(data).draw();
 }
-function save(successSaveCallback) {
+
+function save(updateDataCallback) {
     var form = $("#detailsForm");
     $.ajax({
         type: "POST",
         url: ajaxUrl,
         data: form.serialize(),
-        success: successSaveCallback === null?defaultSuccessSaveCallback:successSaveCallback
+        success: function () {
+            $("#editRow").modal("hide");
+            updateDataCallback();
+            successNoty("Saved");
+        }
     });
-}
-
-function defaultSuccessSaveCallback() {
-    $("#editRow").modal("hide");
-    updateTable();
-    successNoty("Saved");
 }
 
 var failedNote;

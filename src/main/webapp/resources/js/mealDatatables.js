@@ -32,59 +32,41 @@ $(function () {
             ]
         ]
     });
-    mealMakeEditable();
+    makeEditable(MEAL.getData);
 });
+var MEAL = {
+    clearFilter: function () {
+        var form = $("#filterMealForm");
+        form.find(":input").val("");
+        form.attr("filtered", false);
+        updateTable();
+    },
 
-function mealMakeEditable() {
-    $(".delete").click(function (){
-        deleteRow(getClosestRowId($(this)), function () {
-            getFiltered($("#filterMealForm"));
-            successNoty("Deleted");
+    getFiltered: function () {
+        var form = $("#filterMealForm");
+        $.ajax({
+            url: ajaxUrl + "filter/",
+            type: "GET",
+            dataType: "json",
+            data: form.serialize(),
+            success: function (data) {
+                form.attr("filtered", true);
+                updateDataTable(data);
+                successNoty("Filtered");
+            }
+        })
+    },
+    getData: function () {
+        if (isFiltered()) {
+            MEAL.getFiltered();
+        }
+        else {
+            updateTable();
+        }
 
-        });
-    });
+        function isFiltered() {
+            return $("#filterMealForm").attr("filtered");
+        }
+    },
+};
 
-    makeEditable();
-}
-
-function filter() {
-    var form = $("#filterMealForm");
-    getFiltered(form);
-    return false;
-}
-
-function clearFilter(){
-    var form = $("#filterMealForm");
-    form.find(":input").val("");
-    updateTable();
-}
-
-function getFiltered(form) {
-    $.ajax({
-        url: ajaxUrl + "filter/",
-        type: "GET",
-        dataType: "json",
-        data: form.serialize()
-    })
-        .done(function (data) {
-            updateDataTable(data);
-            successNoty("Filtered");
-        });
-
-}
-
-function saveMeal() {
-    save(function () {
-        $("#editRow").modal("hide");
-        getFiltered($("#filterMealForm"));
-        successNoty("Saved");
-    })
-}
-
-function deleteMeal(id) {
-    deleteRow(id, function () {
-        getFiltered($("#filterMealForm"));
-        successNoty("Deleted");
-
-    })
-}

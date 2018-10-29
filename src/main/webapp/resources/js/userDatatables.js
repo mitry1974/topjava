@@ -38,44 +38,30 @@ $(function () {
             ]
         ]
     });
-    userMakeEditable();
+    USER.userMakeEditable();
 });
 
-function userMakeEditable() {
-    $(".user-enable").change(function () {
-        enableUser($(this), this.checked);
-    }).each(function () {
-        setColor($(this), this.checked);
-    });
+var USER = {
+    userMakeEditable: function () {
+        $(".user-enable").change(function () {
+            USER.enableUser($(this), this.checked);
+        });
 
-    $(".delete").click(function () {
-        deleteRow(getClosestRowId($(this)), null);
-    });
+        makeEditable(updateTable);
+    },
 
-
-    makeEditable();
-}
-
-function setColor(element, checked) {
-    var tr = getClosestRow(element);
-
-    if(checked){
-        tr.removeClass('disabled_row');
+    enableUser: function (checkbox, checked) {
+        $.ajax({
+            url: ajaxUrl + getClosestRowId(checkbox),
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(checked),
+            callbackdata: {param1: checkbox},
+            success: function () {
+                getClosestRow(checkbox).attr("user-enabled", checked);
+                successNoty(checked ? "User enabled" : "User disabled");
+            }
+        })
     }
-    else{
-        tr.addClass('disabled_row')
-    }
-}
-function enableUser(checkbox, checked) {
-    $.ajax({
-        url: ajaxUrl + getClosestRowId(checkbox),
-        type: "PUT",
-        contentType: "application/json",
-        data:JSON.stringify(checked),
-        callbackdata:{param1:checkbox},
-        success: function () {
-            setColor(this.callbackdata.param1, checked);
-            successNoty(checked?"User enabled":"User disabled");
-        }
-    })
+
 }

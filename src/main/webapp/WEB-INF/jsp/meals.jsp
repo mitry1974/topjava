@@ -35,11 +35,11 @@
                     <input type="time" class="form-control" id="endTime" name="endTime" value="${param.endTime}">
                 </div>
             </div>
-            <button type="button" class="btn btn-info" onclick="filter()">
+            <button type="button" class="btn btn-info" onclick="MEAL.getFiltered()">
                 <span class="fa fa-filter"></span>
                 <spring:message code="meal.filter"/>
             </button>
-            <button type="button" class="btn btn-info" onclick="clearFilter()">
+            <button type="button" class="btn btn-info" onclick="MEAL.clearFilter()">
                 <span class="fa fa-filter"></span>
                 <spring:message code="meal.clearfilter"/>
             </button>
@@ -111,7 +111,7 @@
                     <span class="fa fa-close"></span>
                     <spring:message code="common.cancel"/>
                 </button>
-                <button type="button" class="btn btn-primary" onclick="saveMeal()">
+                <button type="button" class="btn btn-primary" onclick="save(MEAL.getData)">
                     <span class="fa fa-check"></span>
                     <spring:message code="common.save"/>
                 </button>
