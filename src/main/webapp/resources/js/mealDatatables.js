@@ -38,7 +38,6 @@ var MEAL = {
     clearFilter: function () {
         var form = $("#filterMealForm");
         form.find(":input").val("");
-        form.attr("filtered", false);
         updateTable();
     },
 
@@ -50,7 +49,6 @@ var MEAL = {
             dataType: "json",
             data: form.serialize(),
             success: function (data) {
-                form.attr("filtered", true);
                 updateDataTable(data);
                 successNoty("Filtered");
             }
@@ -65,7 +63,11 @@ var MEAL = {
         }
 
         function isFiltered() {
-            return $("#filterMealForm").attr("filtered");
+            var form = $("#filterMealForm");
+            return form.find("#endDate").val() != ''
+                || form.find("#startDate").val() != ''
+                || form.find("#startTime").val()!=''
+                || form.find("#endTime").val()!='';
         }
     },
 };
